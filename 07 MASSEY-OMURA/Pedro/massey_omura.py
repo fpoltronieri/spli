@@ -13,7 +13,7 @@ from decrypt_file import decrypt
 
 #Controllo argomenti
 args = len(sys.argv)
-usage = "Usage: python massey_omura.py [inputfile] [outputfile] [-de] [key]"
+usage = "Usage: python massey_omura.py [inputfile] [outputfile] [-de] [key] [prime]"
 
 inputfile = sys.argv[1]
 outputfile = sys.argv[2]
@@ -29,6 +29,9 @@ if(sys.argv[3] == '-d'):
 #Passo la chiave come nome di file. La chiave verra generata e utilizzata in encrypt e poi utilizzata in decrypt
 key = sys.argv[4]		
 
+#reading the key parameter (encryption or decryption) and the prime p
+k = int(sys.argv[5])
+p = int(sys.argv[6])
 checkfile1 = os.path.isfile(inputfile)
 checkfile2 = os.path.isfile(key)
 
@@ -45,10 +48,11 @@ if (checkfile1 == False):
 #Chiama funzione encrypt o decrypt a seconda del flag e esce
 
 if(not(decrypting)):
-	encrypt(key,inputfile,outputfile)
+	encrypt(key,inputfile,outputfile,k,p)
 
+#decrypting is the same of encrypting
 elif(decrypting):
-	decrypt(key,inputfile,outputfile)
+	encrypt(key,inputfile,outputfile,k,p)
 else:
 	sys.exit(69)
 

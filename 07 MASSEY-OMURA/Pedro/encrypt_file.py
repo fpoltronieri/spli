@@ -3,7 +3,7 @@ import sys
 import string
 import math
 
-def encrypt(key,inputfile,outputfile):
+def encrypt(key,inputfile,outputfile,keyp,prime):
 
 	#Prova classica con apertura file binario
 	keyfile = open(key,"wb")
@@ -16,30 +16,26 @@ def encrypt(key,inputfile,outputfile):
 	body = content[18:]
 
 	# generating random key
-	randomGen = open('/dev/urandom','rb')
+	# use small prime number in respect of Massey Omura condition
+	# ea 41 da 61 p 251
+        # eb 59 db 89 p 251		
+	#randomGen = open('/dev/urandom','rb')
 	infile_lenght = len(body)#os.fstat(infile.fileno()).st_size
-	pad = randomGen.read(infile_lenght)
-	keyfile.write(pad)
+	#pad = randomGen.read(infile_lenght)
+	#keyfile.write(pad)
 	keyfile.close()
-	randomGen.close()
+	#randomGen.close()
 	
-	# creating padbyte for encription
-	padbyte = bytearray(pad)
 	
-	#byte = bytearray(infile.read())
 
-	#shiftn = padbyte[0]%8
-	#shiftn2 = 8-shiftn
-	#shiftmask = int(math.pow(2, shiftn2))-1;
-	#shiftmask2 = 255 ^ shiftmask
-
-	# writing header
+	# writing header of tga image
 	outfile.write(header)
-	
-	for i in range(0, infile_lenght):
+	for i in range(18, infile_lenght):
 		#temp = ((byte[i] & shiftmask) << shiftn) | ((byte[i] & shiftmask2) >> shiftn2)
-		#byte[i] = temp
-		outfile.write(chr(ord(body[i]) ^ padbyte[i]))
+		n = ord(body[i])
+		n = pow(n,keyp)%prime
+		nc = chr(n)
+		outfile.write(nc)
 
 	infile.close()
 	outfile.close()
