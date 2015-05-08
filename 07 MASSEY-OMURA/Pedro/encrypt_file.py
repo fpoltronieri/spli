@@ -30,7 +30,7 @@ def encrypt(key,inputfile,outputfile,keyp,prime):
 
 	# writing header of tga image
 	outfile.write(header)
-	for i in range(18, infile_lenght):
+	for i in range(0, infile_lenght):
 		#temp = ((byte[i] & shiftmask) << shiftn) | ((byte[i] & shiftmask2) >> shiftn2)
 		n = ord(body[i])
 		n = pow(n,keyp)%prime
